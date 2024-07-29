@@ -1,61 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, query } from 'firebase/firestore';
 import { db } from './firebase';
 
 function App() {
   const [randomData, setRandomData] = useState([]);
 
+  /**
+   * Fetches data from the Firestore collection "data".
+   * Retrieves 10 documents 
+   */
   async function fetchData() {
-    
-    const querySnapshot = await getDocs(query(collection(db, "data"), where("random", ">=", Math.random() * 100) ,limit(10)));
-    /*const allData = querySnapshot.docs.map(doc => doc.data());
-    // Shuffle the array
-    const shuffledData = allData.sort(() => 0.5 - Math.random());
+    // Check if the data has already been fetched
+    if(randomData.length === 0) {
+    // Create a query to fetch documents from the collection "data"
 
-    // Get the first 10 items from the shuffled array
-    const selectedData = shuffledData.slice(0, 10);
+      const q = query(
+        collection(db, "data"),
+        limit(10)
+      );
 
-    setRandomData(selectedData);*/
-    const randData = querySnapshot.docs.map(doc => doc.data());
-    console.log(randData);
-    setRandomData(randData);
+      // Execute the query and get the documents
+      const querySnapshot = await getDocs(q);
 
+      // Map the documents to their data
+      const randData = querySnapshot.docs.map(doc => doc.data());
+
+      // Update the state with the fetched data
+      setRandomData(randData);
+    }
   }
 
   useEffect(() => {
-    //fetchData();
+    // Fetch data when the component mounts
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleLocalStorage() {
-    console.log(localStorage)
-    localStorage.clear();
-    console.log("Local Storage Cleared");
-  };
-
   return (
     <div>
-      <header style={{ fontWeight: "bold", fontSize: "large" }}>
+      <header style={{ fontWeight: "bold", fontSize: "20px" }}>
         Hello, I will be retrieving data from Firestore in Firebase
       </header>
 
-      <button style={{ margin: "12px", fontSize: "20px" }} onClick={fetchData}>
+      <h1 style={{ margin: "12px", fontSize: "20px" }}>
         Refresh The page to get new random data
-      </button>
+      </h1>
 
-      
-        {randomData.map((data, index) => (
-          <div key={index} style={{ margin: "12px" }}>
-            <div style={{ fontWeight: "bold" }}>Data {index + 1}</div>
-            <li>{data.Address}</li>
-            <li>{data.Contact}</li>
-            <li>{data.Email}</li>
-            <li>{data.Name}</li>
-            <li>{data.Narrative}</li>
-          </div>
-        ))}
-      
-        <button onClick={handleLocalStorage}>Clear Local Storage</button>
+      {randomData.map((data, index) => (
+        <div key={index} style={{ margin: "12px" }}>
+          <div style={{ fontWeight: "bold" }}>Data {index + 1}</div>
+          <li>{data.Address}</li>
+          <li>{data.Contact}</li>
+          <li>{data.Email}</li>
+          <li>{data.Name}</li>
+          <li>{data.Narrative}</li>
+        </div>
+      ))}
     </div>
   );
 }
