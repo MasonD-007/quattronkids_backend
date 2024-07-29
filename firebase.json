@@ -1,20 +1,7 @@
 {
-	"functions": [
-		{
-			"source": "functions",
-			"codebase": "default",
-			"ignore": [
-				"node_modules",
-				".git",
-				"firebase-debug.log",
-				"firebase-debug.*.log",
-				"*.local"
-			],
-			"predeploy": ["npm run build"]
-		}
-	],
 	"hosting": {
-		"public": "prud",
-		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+		"public": "src",
+		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+		"predeploy": ["npm run build"]
 	}
 }
