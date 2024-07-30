@@ -12,26 +12,26 @@ function App() {
   async function fetchData() {
     try{
     // Check if the data has already been fetched
-    if(randomData.length === 0) {
+      if(randomData.length === 0) {
     // Create a query to fetch documents from the collection "data"
 
-      const q = query(
-        collection(db, "data"),
-        limit(10)
-      );
+        const q = query(
+          collection(db, "data"),
+          limit(10)
+        );
 
       // Execute the query and get the documents
-      const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(q);
 
       // Map the documents to their data
-      const randData = querySnapshot.docs.map(doc => doc.data());
+        const randData = querySnapshot.docs.map(doc => doc.data());
 
       // Update the state with the fetched data
-      setRandomData(randData);
+        setRandomData(randData);
+      }
+    } catch (error) {
+      console.log("Error fetching data: ", error);
     }
-  } catch (error) {
-    console.log("Error fetching data: ", error);
-  }
   } 
 
   useEffect(() => {
@@ -45,6 +45,8 @@ function App() {
       <header style={{ fontWeight: "bold", fontSize: "20px" }}>
         Hello, I will be retrieving data from Firestore in Firebase
       </header>
+
+      <h3>By: Mason Drake</h3>
 
       {randomData.map((data, index) => (
         <div key={index} style={{ margin: "12px" }}>
